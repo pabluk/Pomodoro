@@ -80,7 +80,6 @@ class CanvasCounter extends Canvas implements CommandListener{
 	private Timer tm;
 	private PomodoroTimer tt;
 	private Player p;
-	//private VolumeControl vc;
 
 	public CanvasCounter(Pomodoro midlet){
 
@@ -106,7 +105,6 @@ class CanvasCounter extends Canvas implements CommandListener{
 		    	InputStream in = getClass().getResourceAsStream(soundfile);
 			p = Manager.createPlayer(in, soundtype);
 			p.realize();
-			//vc = (VolumeControl) p.getControl("VolumeControl");
 		} catch (Exception e) {
 			midlet.showException(e);
 			return;
