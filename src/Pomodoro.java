@@ -91,6 +91,7 @@ class CanvasCounter extends Canvas implements CommandListener{
 			pointer = Image.createImage("/pointer.png");
 		} catch (Exception e) {}
 
+		// Detect sound formats supported
 		String[] types = Manager.getSupportedContentTypes(null);
 		String soundfile = "/ring.mp3";
 		String soundtype = "audio/mpeg";
@@ -135,7 +136,6 @@ class CanvasCounter extends Canvas implements CommandListener{
 			stopTimer();
 			repaint();
 		}
-		//System.out.println(vc.getLevel());
 		repaint();
 	}
 
@@ -161,11 +161,6 @@ class CanvasCounter extends Canvas implements CommandListener{
 	private void showCounterImg(Graphics g) {
 		g.setColor(255, 0, 0);
 		g.fillRect(0, 0, getWidth(), getHeight());
-		//g.setColor(0xffffff);
-		//g.setFont(Font.getFont(Font.FACE_SYSTEM, Font.STYLE_PLAIN, Font.SIZE_MEDIUM));
-		//g.drawString(Integer.toString(vc.getLevel()), 0, 0, g.LEFT | g.TOP);
-		//System.out.println(getWidth());
-		//System.out.println(getHeight());
 		g.drawImage(layout, (getWidth()/2)-(pointer.getWidth()/2) - midlet.getCounter(), 
                     (getHeight()/2)+(layout.getHeight()/2), Graphics.BOTTOM | Graphics.LEFT);
 		g.drawImage(pointer, (getWidth()/2)-(pointer.getWidth()/2), 
