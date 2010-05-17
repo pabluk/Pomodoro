@@ -20,10 +20,20 @@ public class Pomodoro extends MIDlet{
 	private CanvasCounter canvas;
 	private static int counter;
 
+	// Pixel width deplacement between updates
+	// this value is determined in layout.png
+	private static final int PIXEL_WIDTH = 9;
+
+	// Quantity of minutes to count
+	private static final int MINUTES = 25;
+
+	// Limit of the quantity of minutes per pixel
+	private static final int COUNTER_LIMIT = MINUTES * PIXEL_WIDTH;
+
 	public Pomodoro(){
 		display = Display.getDisplay(this);
 		canvas  = new CanvasCounter(this);
-		counter = 225;
+		counter = COUNTER_LIMIT;
 	}
 
 	protected void startApp(){
@@ -42,15 +52,15 @@ public class Pomodoro extends MIDlet{
 	}
 
     	public void addCounter() {
-		counter += 9;
+		counter += PIXEL_WIDTH;
 	}
 
 	public void subCounter() {
-		counter -= 9;
+		counter -= PIXEL_WIDTH;
 	}
 
 	public void resetCounter() {
-	       	counter = 225;
+	       	counter = COUNTER_LIMIT;
 	}
 
 	public int getCounter() {
@@ -77,8 +87,13 @@ class CanvasCounter extends Canvas implements CommandListener{
 	private Image layout;
 	private Image pointer;
 	private static String msgAction;
+
+	//Define interval between screen updates
+	private static final int INTERVAL = 60000;
+
 	private Timer tm;
 	private PomodoroTimer tt;
+
 	private Player p;
 
 	public CanvasCounter(Pomodoro midlet){
@@ -142,8 +157,7 @@ class CanvasCounter extends Canvas implements CommandListener{
 	private void startTimer() {
 		tm = new Timer();
 		tt = new PomodoroTimer();
-		//tm.schedule(tt, 1000, 1000);
-		tm.schedule(tt, 60000, 60000);
+		tm.schedule(tt, INTERVAL, INTERVAL);
 		removeCommand(start);
 		addCommand(stop);
 		setCommandListener(this);
