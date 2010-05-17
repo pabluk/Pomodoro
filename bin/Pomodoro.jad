@@ -1,7 +1,7 @@
 MIDlet-1: Pomodoro, Pomodoro.png, Pomodoro
 MIDlet-Description: A Pomodoro Timer
 MIDlet-Icon: /icon.png
-MIDlet-Jar-Size: 213949
+MIDlet-Jar-Size: 213964
 MIDlet-Jar-URL: Pomodoro.jar
 MIDlet-Name: Pomodoro
 MIDlet-Vendor: Pablo Seminario
