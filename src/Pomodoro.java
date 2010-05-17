@@ -87,7 +87,7 @@ class CanvasCounter extends Canvas implements CommandListener{
 		this.midlet = midlet;
 
 		try {
-			image = Image.createImage("/back3.png");
+			image = Image.createImage("/background.png");
 			layout = Image.createImage("/layout.png");
 			pointer = Image.createImage("/pointer.png");
 		} catch (Exception e) {}
