@@ -17,22 +17,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import java.io.*;
-import java.util.*;
-import javax.microedition.io.*;
-import javax.microedition.midlet.*;
-import javax.microedition.lcdui.*;
-import javax.microedition.media.*;
-import javax.microedition.media.control.*;
-/*
-import javax.microedition.lcdui.Displayable;
+import java.io.InputStream;
+import java.util.Timer;
+import java.util.TimerTask;
+import javax.microedition.midlet.MIDlet;
 import javax.microedition.lcdui.Display;
+import javax.microedition.lcdui.Displayable;
 import javax.microedition.lcdui.Canvas;
-import javax.microedition.lcdui.Graphics;
-import javax.microedition.lcdui.Image;
+import javax.microedition.lcdui.Alert;
 import javax.microedition.lcdui.Command;
 import javax.microedition.lcdui.CommandListener;
-*/
+import javax.microedition.lcdui.Graphics;
+import javax.microedition.lcdui.Image;
+import javax.microedition.media.Player;
+import javax.microedition.media.Manager;
+
 
 public class Pomodoro extends MIDlet{
 	private Display  display;
