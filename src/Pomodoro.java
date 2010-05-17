@@ -27,8 +27,10 @@ public class Pomodoro extends MIDlet{
 	// Quantity of minutes to count
 	private static final int MINUTES = 25;
 
-	// Limit of the quantity of minutes per pixel
-	private static final int COUNTER_LIMIT = MINUTES * PIXEL_WIDTH;
+	// Total of pixels in X minutes
+	private static final int COUNTER_LIMIT = PIXEL_WIDTH * MINUTES;
+
+	private static final int VIBRATION_TIME = 1300;
 
 	public Pomodoro(){
 		display = Display.getDisplay(this);
@@ -67,8 +69,8 @@ public class Pomodoro extends MIDlet{
 		return counter;
 	}
 
-	public void vibrate(int duration) {
-		display.getDisplay(this).vibrate(duration);
+	public void vibrate() {
+		display.getDisplay(this).vibrate(VIBRATION_TIME);
 	}
 
 	public void showException(Exception e) {
@@ -79,22 +81,25 @@ public class Pomodoro extends MIDlet{
 }
 
 class CanvasCounter extends Canvas implements CommandListener{
-	private Command start;
-	private Command stop;
-	private Command exit;
+
+	private final Command START_CMD = new Command("Start", Command.EXIT, 0);
+	private final Command STOP_CMD = new Command("Stop", Command.EXIT, 0);
+	private final Command EXIT_CMD = new Command("Exit", Command.SCREEN, 2);
+
 	private Pomodoro midlet;
+
     	private Image image;
 	private Image layout;
 	private Image pointer;
-	private static String msgAction;
 
-	//Define interval between screen updates
+	// Define interval in milliseconds between screen updates
+	// 1 minute = 60000 milliseconds (You must know it!)
 	private static final int INTERVAL = 60000;
 
 	private Timer tm;
 	private PomodoroTimer tt;
 
-	private Player p;
+	private Player player;
 
 	public CanvasCounter(Pomodoro midlet){
 
@@ -119,66 +124,68 @@ class CanvasCounter extends Canvas implements CommandListener{
 
 		try {
 		    	InputStream in = getClass().getResourceAsStream(soundfile);
-			p = Manager.createPlayer(in, soundtype);
-			p.realize();
+			player = Manager.createPlayer(in, soundtype);
+			player.realize();
 		} catch (Exception e) {
 			midlet.showException(e);
 			return;
 		}
 
-		start = new Command("Start", Command.EXIT, 0);
-		stop = new Command("Stop", Command.EXIT, 0);
-		exit = new Command("Exit", Command.SCREEN, 2);
-		addCommand(start);
-		addCommand(exit);
+		addCommand(START_CMD);
+		addCommand(EXIT_CMD);
 		setCommandListener(this);
 
 	} 
 	
 	protected void paint(Graphics g){
-		showCounterImg(g);
+		drawPomodoro(g);
 	}
 
 	public void commandAction(Command c, Displayable d){
-		msgAction = c.getLabel();
-		if (c == exit) {
+		if (c == EXIT_CMD) {
 			setCommandListener(null);
 			midlet.exitMIDlet();
-		} else if (c == start) {
+		} else if (c == START_CMD) {
 			startTimer();
 			repaint();
-		} else if (c == stop) {
+		} else if (c == STOP_CMD) {
 			stopTimer();
 			repaint();
 		}
-		repaint();
 	}
 
 	private void startTimer() {
 		tm = new Timer();
 		tt = new PomodoroTimer();
 		tm.schedule(tt, INTERVAL, INTERVAL);
-		removeCommand(start);
-		addCommand(stop);
+		removeCommand(START_CMD);
+		addCommand(STOP_CMD);
 		setCommandListener(this);
 	}
 
 	private void stopTimer() {
 		tm.cancel();
 		midlet.resetCounter();
-		removeCommand(stop);
-		addCommand(start);
+		removeCommand(STOP_CMD);
+		addCommand(START_CMD);
 		setCommandListener(this);
 		repaint();
 	}
 
-	private void showCounterImg(Graphics g) {
+	private void drawPomodoro(Graphics g) {
+		// Paint red background
 		g.setColor(255, 0, 0);
 		g.fillRect(0, 0, getWidth(), getHeight());
+
+		// Draw scale of numbers
 		g.drawImage(layout, (getWidth()/2)-(pointer.getWidth()/2) - midlet.getCounter(), 
                     (getHeight()/2)+(layout.getHeight()/2), Graphics.BOTTOM | Graphics.LEFT);
+
+		// Draw pointer
 		g.drawImage(pointer, (getWidth()/2)-(pointer.getWidth()/2), 
                     (getHeight()/2)+(layout.getHeight()/2), Graphics.TOP | Graphics.LEFT);
+
+		// Draw tomato
 		g.drawImage(image, 0, 0, Graphics.TOP | Graphics.LEFT);
 	}
 
@@ -189,12 +196,12 @@ class CanvasCounter extends Canvas implements CommandListener{
 
 			if (midlet.getCounter() == 0) {
 				try {
-					p.start();
+					player.start();
 				} catch (Exception e) {
 					midlet.showException(e);
 					return;
 				}
-				midlet.vibrate(1300);
+				midlet.vibrate();
 				stopTimer();
 			}
 		}
